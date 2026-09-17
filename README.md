@@ -1,6 +1,8 @@
 # Hue Studio
 
-Aplicación local en **Python**, con interfaz web en español, para administrar Philips Hue y guardar/restaurar configuraciones. Sin dependencias Python ni compilación del frontend. Requiere Python 3.10 o posterior y un navegador moderno.
+Aplicación local en **Python**, con interfaz web multilingüe, para administrar Philips Hue y guardar/restaurar configuraciones. Sin dependencias Python ni compilación del frontend. Requiere Python 3.10 o posterior y un navegador moderno.
+
+La interfaz está disponible en **español, inglés y francés**. Usa el selector de la cabecera para cambiar de idioma; la elección se recuerda en este navegador. Los nombres de luces, habitaciones y escenas mantienen el texto del bridge.
 
 ```bash
 python3 app.py

@@ -236,9 +236,9 @@ class Handler(BaseHTTPRequestHandler):
                 with urllib.request.urlopen('https://discovery.meethue.com/', timeout=8) as response:
                     data = json.load(response)
                 self.send(200, data)
-            elif path in ('/', '/app.js', '/style.css'):
-                name = {'/': 'index.html', '/app.js': 'app.js', '/style.css': 'style.css'}[path]
-                mime = {'/': 'text/html', '/app.js': 'text/javascript', '/style.css': 'text/css'}[path]
+            elif path in ('/', '/app.js', '/i18n.js', '/style.css'):
+                name = {'/': 'index.html', '/app.js': 'app.js', '/i18n.js': 'i18n.js', '/style.css': 'style.css'}[path]
+                mime = {'/': 'text/html', '/app.js': 'text/javascript', '/i18n.js': 'text/javascript', '/style.css': 'text/css'}[path]
                 self.send(200, (STATIC / name).read_bytes(), mime + '; charset=utf-8')
             else:
                 self.send(404, {'error': 'No encontrado.'})

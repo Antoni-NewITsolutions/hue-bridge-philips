@@ -173,6 +173,8 @@ class HttpTests(unittest.TestCase):
             try:
                 with urllib.request.urlopen(base) as response:
                     self.assertIn(b'Hue Studio', response.read())
+                with urllib.request.urlopen(base + '/i18n.js') as response:
+                    self.assertIn(b'function translate', response.read())
                 with urllib.request.urlopen(base + '/api/state') as response:
                     state = json.load(response)
                     self.assertFalse(state['connected'])
