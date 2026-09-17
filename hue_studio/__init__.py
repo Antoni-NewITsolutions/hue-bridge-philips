@@ -1,0 +1,1 @@
+"""Local Philips Hue administration."""

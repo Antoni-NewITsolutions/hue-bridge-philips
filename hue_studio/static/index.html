@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f6f7f9"><title>Hue Studio · Tu hogar, conectado</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body>
+<aside class="sidebar">
+  <a class="brand" href="/" aria-label="Hue Studio inicio"><span class="brand-symbol">h<span>•</span></span><span>hue<span class="brand-light">studio</span><small>EL CONTROL DE TU HOGAR</small></span></a>
+  <div class="nav-label">ESPACIO DE TRABAJO</div><nav id="navigation"></nav>
+  <div class="sidebar-bottom"><div class="local-mark"><span class="dot"></span> Hecho para tu red local</div><p>Tus dispositivos. Tus datos.<br>Todo, en un mismo lugar.</p><span class="version">HUE STUDIO / 01</span></div>
+</aside>
+<div class="workspace">
+  <header><div class="breadcrumb">Mi hogar <span>/</span> <strong id="crumb">Vista general</strong></div><div class="header-actions"><span id="connection" class="connection"></span><button class="button small" data-action="connect">Conectar bridge <span>↗</span></button></div></header>
+  <main id="main"><div class="empty">Cargando tu hogar…</div></main>
+  <footer><span>Hue Studio · Espacio local de Philips Hue</span><span id="foot-status">Exploración</span></footer>
+</div>
+<dialog id="dialog"><div id="dialog-content"></div></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="busy" hidden><span class="spinner"></span><span id="busy-label">Procesando…</span></div>
+</body></html>

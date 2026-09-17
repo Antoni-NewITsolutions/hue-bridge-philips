@@ -1,0 +1,13 @@
+{
+  "name": "hue-bridge-philips",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Hue Philips bridge export helper",
+  "scripts": {
+    "discover": "node index.js discover",
+    "token": "node index.js token",
+    "export": "node index.js export",
+    "help": "node index.js help"
+  },
+  "license": "MIT"
+}

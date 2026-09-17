@@ -1,0 +1,7 @@
+.hue-config.json
+.hue-studio/
+hue-export.json
+__pycache__/
+.venv/
+.DS_Store
+.vscode/
