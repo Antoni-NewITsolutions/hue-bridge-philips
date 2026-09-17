@@ -31,7 +31,7 @@ Se reutiliza la conexión de `.hue-config.json`, si existe. Puedes guardar vario
 - Consulta de sensores, batería, modelo, estado y todas sus propiedades JSON.
 - Creación y edición de habitaciones, zonas y grupos, seleccionando sus luces.
 - Activación de escenas y creación de escenas con el ambiente actual.
-- Mapa navegable de relaciones entre bridge, espacios y luces, con búsqueda. Al pulsar un elemento se resaltan sus conexiones y se muestran sus luces, espacios, escenas y sensores relacionados.
+- Mapa navegable de relaciones entre bridge, espacios y luces, con búsqueda. Las luces se agrupan por habitación y se ordenan alfabéticamente dentro de ella; las relaciones del panel también se ordenan por nombre. Al pulsar un elemento se resaltan sus conexiones y se muestran sus luces, espacios, escenas y sensores relacionados.
 - Explorador de luces, sensores, grupos, escenas, horarios, reglas y enlaces; editor de propiedades compatibles con la API. Los campos de solo lectura son rechazados por el bridge.
 - Copias completas con detalle individual de las escenas, importación/exportación JSON y restauración con vista previa.
 - Copia previa automática antes de restaurar o eliminar un recurso lógico.

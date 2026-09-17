@@ -37,7 +37,18 @@ function devices(){const sensors=filter==='sensors';let items=entries(sensors?'s
 }
 function groups(){return heading('Un espacio para cada momento','Organiza habitaciones y combina luces en zonas.',button('＋ Nuevo espacio','new-group',canWrite(),'primary'))+searchbar(filterButtons([['all','Todos'],['Room','Habitaciones'],['Zone','Zonas'],['LightGroup','Grupos']]))+`<section class="grid">${entries('groups').filter(([,g])=>matches(g)&&(filter==='all'||g.type===filter)).map(([id,g])=>groupCard(id,g)).join('')||empty('No hay espacios con este filtro.')}</section>`;}
 function scenes(){return heading('El ambiente perfecto','Escenas guardadas en tu bridge.',button('＋ Guardar ambiente actual','new-scene',canWrite(),'primary'))+searchbar()+`<section class="grid">${entries('scenes').filter(([,s])=>matches(s)).map(([id,s],i)=>`<article class="card"><div class="card-top"><span class="tile-icon" style="background:hsl(${205+(i%4)*5} 66% 94%);color:hsl(${205+(i%4)*5} 48% 53%)">◐</span><span class="badge">${s.lights?.length||Object.keys(s.lightstates||{}).length} luces</span></div><h3>${esc(s.name)}</h3><span class="muted" ${s.group&&state.resources.groups?.[s.group]?'data-no-i18n':''}>${esc(state.resources.groups?.[s.group]?.name||'Escena de luces')}</span><div class="card-bottom">${button('▷ Activar','recall',`data-id="${esc(id)}" ${canWrite()}`,'small')}${button('Detalles ↗','detail',`data-kind="scenes" data-id="${esc(id)}"`,'link')}</div></article>`).join('')||empty('No hay escenas con este filtro.')}</section>`;}
-function relationList(title, items){return `<section class="relation-section"><h3>${esc(title)} <span>${items.length}</span></h3>${items.length?items.map(([kind,id,item])=>`<button class="relation-item" data-action="${kind==='groups'||kind==='lights'?'select-relation':'detail'}" data-kind="${kind}" data-id="${esc(id)}"><span>${esc(item.name||item.type||id)}</span><small>${kind==='groups'?esc(item.type):kind==='lights'?'Luz':kind==='scenes'?'Escena':'Sensor'} ↗</small></button>`).join(''):'<p class="muted">Sin relaciones de este tipo.</p>'}</section>`;}
+const alphabetic=(a,b)=>String(a||'').localeCompare(String(b||''),language,{numeric:true,sensitivity:'base'});
+function orderedRelationGroups(){const priority={Room:0,Zone:1,LightGroup:2};return entries('groups').sort(([,a],[,b])=>(priority[a.type]??3)-(priority[b.type]??3)||alphabetic(a.name,b.name));}
+function orderedRelationLights(){
+ const roomByLight=new Map();
+ for(const [,room] of orderedRelationGroups())if(room.type==='Room')for(const id of room.lights||[])if(!roomByLight.has(id))roomByLight.set(id,room.name||'');
+ return entries('lights').sort(([idA,a],[idB,b])=>{
+  const roomA=roomByLight.get(idA),roomB=roomByLight.get(idB);
+  if(roomA===undefined||roomB===undefined){if(roomA===undefined&&roomB!==undefined)return 1;if(roomB===undefined&&roomA!==undefined)return -1;}
+  return alphabetic(roomA,roomB)||alphabetic(a.name,b.name);
+ });
+}
+function relationList(title, items){const sorted=[...items].sort((a,b)=>alphabetic(a[2].name||a[2].type,b[2].name||b[2].type));return `<section class="relation-section"><h3>${esc(title)} <span>${items.length}</span></h3>${sorted.length?sorted.map(([kind,id,item])=>`<button class="relation-item" data-action="${kind==='groups'||kind==='lights'?'select-relation':'detail'}" data-kind="${kind}" data-id="${esc(id)}"><span>${esc(item.name||item.type||id)}</span><small>${kind==='groups'?esc(item.type):kind==='lights'?'Luz':kind==='scenes'?'Escena':'Sensor'} ↗</small></button>`).join(''):'<p class="muted">Sin relaciones de este tipo.</p>'}</section>`;}
 function relationDetails(){
  if(!selectedRelation)return `<div class="relation-hint"><span>⌘</span><h3>Selecciona un elemento</h3><p>Pulsa el bridge, una habitación, una zona o una luz. Verás sus conexiones actuales y podrás abrir cada recurso.</p></div>`;
  const {kind,id}=selectedRelation, resource=kind==='bridge'?state.resources.config:state.resources[kind]?.[id];
@@ -59,8 +70,8 @@ function relationDetails(){
  return `<div class="relation-details-head"><div class="eyebrow">RELACIONES ACTUALES</div><h2>${esc(resource.name||'Bridge')}</h2><p>${kind==='bridge'?'Bridge Hue':kind==='groups'?esc(resource.type):'Luz'} · ${kind==='bridge'?'Todos los recursos':sections.reduce((n,[,items])=>n+items.length,0)+' relaciones'}</p>${kind!=='bridge'?button('Ver propiedades ↗','detail',`data-kind="${kind}" data-id="${esc(id)}"`,'small'):''}</div>${sections.map(([title,items])=>relationList(title,items)).join('')}`;
 }
 function relations(){
- let groups=entries('groups').filter(([,g])=>matches(g)),lights=entries('lights').filter(([id,l])=>!query||matches(l)||groups.some(([,g])=>g.lights?.includes(id)));
- if(query)groups=entries('groups').filter(([,g])=>matches(g)||g.lights?.some(id=>lights.some(([lid])=>lid===id)));
+ let groups=orderedRelationGroups().filter(([,g])=>matches(g)),lights=orderedRelationLights().filter(([id,l])=>!query||matches(l)||groups.some(([,g])=>g.lights?.includes(id)));
+ if(query)groups=orderedRelationGroups().filter(([,g])=>matches(g)||g.lights?.some(id=>lights.some(([lid])=>lid===id)));
  const height=Math.max(groups.length*58,lights.length*43,350)+90;
  const positions=new Map(lights.map(([id],i)=>[id,90+i*43]));
  const selected=selectedRelation, selectedGroup=selected?.kind==='groups'?selected.id:null,selectedLight=selected?.kind==='lights'?selected.id:null;
