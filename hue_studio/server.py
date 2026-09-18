@@ -240,6 +240,13 @@ class Handler(BaseHTTPRequestHandler):
                 name = {'/': 'index.html', '/app.js': 'app.js', '/i18n.js': 'i18n.js', '/style.css': 'style.css'}[path]
                 mime = {'/': 'text/html', '/app.js': 'text/javascript', '/i18n.js': 'text/javascript', '/style.css': 'text/css'}[path]
                 self.send(200, (STATIC / name).read_bytes(), mime + '; charset=utf-8')
+            elif path in ('/hue_logo.svg', '/favicon.svg', '/favicon.ico'):
+                file_name = {'/hue_logo.svg': 'hue_logo.svg', '/favicon.svg': 'hue_logo.svg', '/favicon.ico': 'favicon.ico'}[path]
+                mime = {'/hue_logo.svg': 'image/svg+xml', '/favicon.svg': 'image/svg+xml', '/favicon.ico': 'image/x-icon'}[path]
+                if path == '/favicon.ico':
+                    self.send(200, (STATIC / file_name).read_bytes(), mime)
+                else:
+                    self.send(200, (STATIC / file_name).read_bytes(), mime + '; charset=utf-8')
             else:
                 self.send(404, {'error': 'No encontrado.'})
         except Exception:
